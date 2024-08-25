@@ -6,8 +6,7 @@ from googleapiclient.discovery import build
 import re
 
 load_dotenv()
-api_key = os.getenv("API_KEY")
-YOUTUBE_API_KEY = MY_YOUTUBE_API_KEY
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 def search_channel(channel_handle):
     youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)

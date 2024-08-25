@@ -43,10 +43,9 @@ from langchain_core.output_parsers import StrOutputParser
 
 # Set environment variables
 load_dotenv()
-api_key = os.getenv("API_KEY")
-os.environ['OPENAI_API_KEY'] = OPENAI_API_KEY
-os.environ['PINECONE_API_KEY'] = PINECONE_API_KEY
-os.environ["PREDIBASE_API_TOKEN"] = PREDIBASE_API_TOKEN
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+PREDIBASE_API_KEY = os.getenv("PREDIBASE_API_KEY")
 
 # Check if the correct number of arguments are provided
 if len(sys.argv) != 3:
@@ -136,13 +135,13 @@ def split_documents(documents, JSONobjects, max_size):
 
 def main():
     # Initialize Pinecone client
-    pc = Pinecone(api_key=os.environ['PINECONE_API_KEY'])
+    pc = Pinecone(api_key=PINECONE_API_KEY)
 
     index_name = pinecone_index_name #code for manual input:input('Enter index name: ')
     model_name = 'text-embedding-ada-002'  
     embeddings = OpenAIEmbeddings(  
         model=model_name,  
-        openai_api_key=os.environ['OPENAI_API_KEY']  
+        openai_api_key=OPENAI_API_KEY  
     )
 
     # Check if the index exists and create if it doesn't

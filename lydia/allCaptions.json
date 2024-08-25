@@ -1,0 +1,63 @@
+{
+    "lydia_MAIN_DOC": {
+        "channelInformation": {
+            "channelId": "UCZh5kO3E9oC91ZSLYpiDtQw",
+            "handle": "lydia-.",
+            "channelTitle": "lydia",
+            "description": "I make videos about computer science sometimes! ",
+            "thumbnail": "https://yt3.ggpht.com/1gJ5B5AYTfloJZwiEDGReqYSHo4KhhM6WlEGhyQdS-lrSQIuXOI-Qef5rORC1TJh2iPyh_tfBg=s88-c-k-c0x00ffffff-no-rj",
+            "subscriberCount": "10300",
+            "videoCount": "10"
+        },
+        "1KvYcoTeRbI": {
+            "videoId": "1KvYcoTeRbI",
+            "title": "Undecidable Problems: Reducibility (Part 2) | A Sample Reduction",
+            "publishedAt": "2020-12-10T12:36:12Z"
+        },
+        "U4yGQp5aCTM": {
+            "videoId": "U4yGQp5aCTM",
+            "title": "Undecidable Problems: Reducibility (Part 1) | What are Reductions?",
+            "publishedAt": "2020-12-10T12:35:53Z"
+        },
+        "Ph7Z9YttM0Q": {
+            "videoId": "Ph7Z9YttM0Q",
+            "title": "Nonregular languages: How to use the Pumping Lemma",
+            "publishedAt": "2020-11-05T10:17:45Z"
+        },
+        "qtnNyUlO6vU": {
+            "videoId": "qtnNyUlO6vU",
+            "title": "What is the Pumping Lemma",
+            "publishedAt": "2020-11-05T10:17:40Z"
+        },
+        "nIp604p0M8M": {
+            "videoId": "nIp604p0M8M",
+            "title": "Regular Operations",
+            "publishedAt": "2020-10-01T10:05:58Z"
+        },
+        "VyHbd6sx5Po": {
+            "videoId": "VyHbd6sx5Po",
+            "title": "The Halting Problem: The Unsolvable Problem",
+            "publishedAt": "2020-04-22T09:39:59Z"
+        },
+        "W8Uu0inPmU8": {
+            "videoId": "W8Uu0inPmU8",
+            "title": "Regular Languages: Nondeterministic Finite Automaton (NFA)",
+            "publishedAt": "2020-04-22T08:32:36Z"
+        },
+        "PK3wL7DXuuw": {
+            "videoId": "PK3wL7DXuuw",
+            "title": "Regular Languages: Deterministic Finite Automaton (DFA)",
+            "publishedAt": "2020-04-22T07:37:41Z"
+        },
+        "miOofcAiINM": {
+            "videoId": "miOofcAiINM",
+            "title": "Introduction to Languages, Strings, and Operations",
+            "publishedAt": "2020-04-22T06:57:45Z"
+        },
+        "SV57Yv8BXBc": {
+            "videoId": "SV57Yv8BXBc",
+            "title": "Why study theory of computation?",
+            "publishedAt": "2020-04-22T05:42:32Z"
+        }
+    }
+}
