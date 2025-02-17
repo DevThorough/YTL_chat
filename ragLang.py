@@ -302,7 +302,7 @@ def main():
         AttributeInfo(
             name="date",
             description="The date the youtube video was published in YYYYMMDDHHMMSS format",
-            type="INTEGER. DO NOT PUT QUOTATIONS AROUND VALUE",
+            type="INTEGER. **DO NOT PUT QUOTATIONS AROUND VALUE!! DO NOT PUT QUOTATIONS AROUND VALUE!!**",
         ),
         # AttributeInfo(
         #     name="document_id",
@@ -364,7 +364,7 @@ def main():
     llm = Predibase(
         model="llama-3-1-8b-instruct",
         predibase_api_key=os.environ.get("PREDIBASE_API_TOKEN"),
-        temperature=0,
+        temperature=0.5,
         max_new_tokens=10000,
         # predibase_sdk_version=None,  # optional parameter (defaults to the latest Predibase SDK version if omitted)
         # adapter_id="yt_lore",
@@ -379,8 +379,12 @@ def main():
     #     # adapter_id="yt_lore",
     #     # adapter_version=1,
     # )
-    vectorstore = PineconeVectorStore(index_name=index_name, embedding=embeddings)
+    # vectorstore = PineconeVectorStore(index_name=index_name, embedding=embeddings)
 
+    # from langchain.vectorstores import Pinecone as lcPinecone
+    # vectorstore = lcPinecone.from_existing_index(index_name=index_name, embedding = embeddings)
+    vectorstore = PineconeVectorStore.from_existing_index(index_name=index_name, embedding = embeddings)
+    print(f"MY VECTORSTORE CLASS: {vectorstore.__class__}")
 
     # StructuredQuery captures the filters specified by the user
     from langchain.chains.query_constructor.base import (
@@ -403,20 +407,20 @@ def main():
         "$nin",  # not in a specified array (array)
     ]
 
-    prompt = get_query_constructor_prompt(
-        document_content_description,
-        metadata_field_info,
-        allowed_comparators=allowed_comparators,
-        #schema_prompt=""
-    )
-    output_parser = StructuredQueryOutputParser.from_components()
-    output_parser2 = JsonOutputParser()
-    def dumpjs(output):
-        print("\nDUMP:", json.dumps(output))
-        return output
-    def reg_str(output):
-        return output.replace('```json', '').replace('```', '')
-    query_constructor = prompt | llm | dumpjs | output_parser
+    # prompt = get_query_constructor_prompt(
+    #     document_content_description,
+    #     metadata_field_info,
+    #     allowed_comparators=allowed_comparators,
+    #     #schema_prompt=""
+    # )
+    # output_parser = StructuredQueryOutputParser.from_components()
+    # output_parser2 = JsonOutputParser()
+    # def dumpjs(output):
+    #     print("\nDUMP:", json.dumps(output))
+    #     return output
+    # def reg_str(output):
+    #     return output.replace('```json', '').replace('```', '')
+    # query_constructor = prompt | llm | dumpjs | output_parser
     
     # retry_parser1 = RetryOutputParser.from_llm(parser=StructuredQueryOutputParser.from_components(), llm=llm)
     # main_query_constructor = RunnableParallel(
@@ -424,29 +428,29 @@ def main():
     # ) | RunnableLambda(lambda x: retry_parser1.parse_with_prompt(**x))
 
 
-    # retriever1 = SelfQueryRetriever.from_llm(
-    #     llm,
-    #     metadata_field_info,
-    #     vectorstore,
-    #     document_content_description,
+    retriever1 = SelfQueryRetriever.from_llm(
+        llm,
+        vectorstore,
+        document_content_description,
+        metadata_field_info,
+    )
+    # retriever2 = SelfQueryRetriever(
+    #     query_constructor=query_constructor,#or main_query_constructor
+    #     vectorstore=vectorstore,
+    #     structured_query_translator=PineconeTranslator(),
+    #     verbose=True,
+    #     enable_limit=True
     # )
-    retriever2 = SelfQueryRetriever(
-        query_constructor=query_constructor,#or main_query_constructor
-        vectorstore=vectorstore,
-        structured_query_translator=PineconeTranslator(),
-        verbose=True,
-        enable_limit=True
-    )
 
-    def _combine_documents(docs: List) -> str:
-        return "\n\n".join(format_document(doc, prompt=DOCUMENT_PROMPT) for doc in docs)
-    _context = RunnableParallel(
-        context=retriever2 | _combine_documents,
-        question=RunnablePassthrough(),
-    )
-    chain = (
-        _context | LLM_CONTEXT_PROMPT | llm | StrOutputParser()
-    )
+    # def _combine_documents(docs: List) -> str:
+    #     return "\n\n".join(format_document(doc, prompt=DOCUMENT_PROMPT) for doc in docs)
+    # _context = RunnableParallel(
+    #     context=retriever2 | _combine_documents,
+    #     question=RunnablePassthrough(),
+    # )
+    # chain = (
+    #     _context | LLM_CONTEXT_PROMPT | llm | StrOutputParser()
+    # )
 
     # retry_parser2 = RetryOutputParser.from_llm(parser=StrOutputParser(), llm=llm)
     # main_chain = RunnableParallel(
@@ -455,7 +459,7 @@ def main():
 
     #main_chain.invoke({"query": "who is leo di caprios gf?"})
 
-    # qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever1)
+    qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever1)
 
     # Example usage
     q1 = f"Who is {input_dir}?"
@@ -469,40 +473,13 @@ def main():
     q9 = "Give me a title of a video posted after the date 20240625000000"
     queries = [q5,q6,q7,q8]
 
-    query = q9
+    query = q1
 
 
-    # response = qa.invoke(query)
-    # print("Response:", response)
-
-    construct = query_constructor.invoke(
-        {
-            "query": query
-        }
-    )
-    print("Construct:", construct)
-    response = chain.invoke({"query": query})
+    response = qa.invoke(query)
     print("Response:", response)
 
-    # for i, q in enumerate(queries):
-    #     construct = query_constructor.invoke(
-    #         {
-    #             "query": q
-    #         }
-    #     )
-    #     print(f"Construct {i+1}:", construct)
-    #     #response = qa.invoke(q)
-    #     response = chain.invoke(q)
-    #     print(f"Response {i+1}:",response)
 
 
 if __name__ == '__main__':
     main()
-
-"""
-TO DO LIST:
--fix parsing
-.replace('```json', '').replace('```', '')
-LangChain Output Parser
--finetune
-"""
