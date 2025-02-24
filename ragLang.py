@@ -481,5 +481,23 @@ def main():
 
 
 
+    """
+    Working code copied from ragLangV3:
+    
+    qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=vectorstore.as_retriever())
+
+
+    responses = []
+    for query in queries:
+        response = qa.run(query)
+        responses.append(response)
+
+    for i, response in enumerate(responses):
+        print(f'Response{i+1}: ', response)
+    
+    """
+
+
+
 if __name__ == '__main__':
     main()
