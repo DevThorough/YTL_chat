@@ -361,15 +361,17 @@ def main():
         # ),
     ]
     document_content_description = f"Information from a Youtube channel titled {input_dir}. Documents are either MAIN_DOC documents or Video documents. Video documents contain captions text of what was said during the video."
-    llm = Predibase(
-        model="llama-3-1-8b-instruct",
-        predibase_api_key=os.environ.get("PREDIBASE_API_TOKEN"),
-        temperature=0.5,
-        max_new_tokens=10000,
-        # predibase_sdk_version=None,  # optional parameter (defaults to the latest Predibase SDK version if omitted)
-        # adapter_id="yt_lore",
-        # adapter_version=1,
-    )
+    llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model_name='gpt-3.5-turbo', temperature=0.1)
+    
+    # llm = Predibase(
+    #     model="llama-3-1-8b-instruct",
+    #     predibase_api_key=os.environ.get("PREDIBASE_API_TOKEN"),
+    #     temperature=0.5,
+    #     max_new_tokens=10000,
+    #     # predibase_sdk_version=None,  # optional parameter (defaults to the latest Predibase SDK version if omitted)
+    #     # adapter_id="yt_lore",
+    #     # adapter_version=1,
+    # )
     # llm2 = Predibase(
     #     model="llama-3-1-8b",
     #     predibase_api_key=os.environ.get("PREDIBASE_API_TOKEN"),
@@ -459,7 +461,8 @@ def main():
 
     #main_chain.invoke({"query": "who is leo di caprios gf?"})
 
-    qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever1)
+    # qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever1)
+    qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=vectorstore.as_retriever())
 
     # Example usage
     q1 = f"Who is {input_dir}?"
@@ -483,7 +486,7 @@ def main():
 
     """
     Working code copied from ragLangV3:
-    
+
     qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=vectorstore.as_retriever())
 
 
