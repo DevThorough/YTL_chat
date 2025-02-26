@@ -194,7 +194,7 @@ def main():
         return      
 
     video_objects = get_channel_videos(channel['channelId'])
-    output_dir = f"{channel['channelTitle']}"
+    output_dir = f"{channel['channelTitle'].replace(' ','')}"
     
     # Create the directory if it doesn't exist
     if not os.path.exists(output_dir):

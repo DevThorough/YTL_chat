@@ -1,6 +1,7 @@
 import streamlit as st
 import subprocess
 import sys
+import re
 
 
 channel_handle = st.text_input("Enter YouTube channel handle(begins with @): ")
@@ -13,14 +14,30 @@ if channel_handle:
     if choice == "No":
         st.write("Please try another search.") 
     elif choice == "Yes":
-        final_result = subprocess.run([sys.executable, "youtube_lore.py", channel_handle, "1"], capture_output=True, text=True)
-        st.code(final_result.stdout)
+        st.write("Please wait. Currently downloading captions.") 
+        download_output = subprocess.run([sys.executable, "youtube_lore.py", channel_handle, "1"], capture_output=True, text=True)
+        st.code(download_output.stdout)
+        
+        pattern = r"Captions saved to ([^/]+)"
+        match = re.search(pattern, download_output.stdout)
+        
+        if match:
+            folder_name = match.group(1).strip()
+            st.success(f"Success! Folder name: {folder_name}")
+            
+            ai_output = subprocess.run([sys.executable, "ragLang.py", "new-test", folder_name], capture_output=True, text=True)
+            st.code(ai_output.stdout)
+            
+        else:
+            st.warning("Error: Folder name not found in the output.")
         
     """
-    Put code for running ragLang.py
-    - Have to get folder name from output
-    - Then run ragLang
+    TO DO LIST:
     - Edit ragLang to have a continuos query output loop
+    
+    Additional Options:
+    -Already existing folder and index
+    - Verbose toggle
     """
 
         
