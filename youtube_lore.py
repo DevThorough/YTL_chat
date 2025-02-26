@@ -4,9 +4,17 @@ import os
 import subprocess
 from googleapiclient.discovery import build
 import re
+import sys
 
 load_dotenv()
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+
+using_sys_args = False
+if len(sys.argv) == 3:
+    handle_name = sys.argv[1]
+    confirm_choice = sys.argv[2]
+    using_sys_args = True
+
 
 def search_channel(channel_handle):
     youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
@@ -152,7 +160,11 @@ def parse_vtt(file_path, videoObj):
 #formattedString = f'<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n You are an expert at understanding the unique story of each video and the unique story that is presented over all videos. You are an assistant for deeply understanding and querying information about a specific youtuber. This Youtuber is: {handle} <|eot_id|><|start_header_id|>user<|end_header_id|>\n\n Video Title: {title}. Video captions: {" ".join(captions)} <|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n'
 
 def main():
-    channel_handle = input('Enter YouTube channel handle(begins with @): ')
+    #if using_sys_args
+    if using_sys_args:
+        channel_handle = handle_name
+    else:
+        channel_handle = input('Enter YouTube channel handle(begins with @): ')
     # channels = search_channel(channel_handle)
     
     # if not channels:
@@ -172,9 +184,14 @@ def main():
     # Display channel for user confirmation
     print(f"{channel['channelTitle']}\n   Description: {channel['description']}\n   Thumbnail: {channel['thumbnail']}\n   Subscribers: {channel['subscriberCount']}\n   Videos: {channel['videoCount']}\n")
 
-    choice = int(input('Is this the correct channel? (1/0): '))
+    if using_sys_args:
+        choice = int(confirm_choice)
+        
+    else:
+        choice = int(input('Is this the correct channel? (1/0): '))
+    
     if choice != 1:
-        return
+        return      
 
     video_objects = get_channel_videos(channel['channelId'])
     output_dir = f"{channel['channelTitle']}"
