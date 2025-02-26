@@ -10,11 +10,22 @@ if channel_handle:
     st.code(channel_lookup.stdout)
 
     choice = st.selectbox("Is this the correct channel?",(" ","Yes", "No"))
-    if choice == "Yes":
+    if choice == "No":
+        st.write("Please try another search.") 
+    elif choice == "Yes":
         final_result = subprocess.run([sys.executable, "youtube_lore.py", channel_handle, "1"], capture_output=True, text=True)
         st.code(final_result.stdout)
-    elif choice == "No":
-        st.write("Please try another search.")
+        
+    """
+    Put code for running ragLang.py
+    - Have to get folder name from output
+    - Then run ragLang
+    - Edit ragLang to have a continuos query output loop
+    """
+
+        
+        
+        
 
 # if st.button("Run Script"):
 #     if index_name and folder_name:
