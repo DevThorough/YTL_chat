@@ -33,11 +33,13 @@ if channel_handle:
         
     """
     TO DO LIST:
-    - Edit ragLang to have a continuos query output loop
+    - Edit ragLang to have a continuous query output loop
+    - Allow user to enter their own query
     
     Additional Options:
-    -Already existing folder and index
+    - Already existing folder and index
     - Verbose toggle
+    - Display thumbnail and terminal output in a more appealing way
     """
 
         
